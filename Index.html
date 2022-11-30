@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>calculadora do Craudin</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+</head>
+
+<body>
+    <header>
+        <img class="craudinho-img" src="./Imagens/craudin.png" alt="">
+        <h3>Calculadora do Craudin</h3>
+    </header>
+    <div class="corpo">
+        <section id="select-calc">
+            <a href="#select-calc" onclick="showSAC()">Calcular em SAC</a>
+            <a href="#select-calc" onclick="showPRICE()">Calcular em PRICE</a>
+        </section>
+
+        <section id="SAC" class="calc" style="display: none;">
+            <h1>Amortização em sistema SAC</h1>
+            <label for="saldoDevedorSAC">Saldo Devedor</label><br>
+            <input type="saldoDevedorSAC" id="saldoDevedorSAC" name="saldoDevedorSAC"><br>
+            <label for="totalparcelasSAC">Total de parcelas</label><br>
+            <input type="totalparcelasSAC" id="totalparcelasSAC" name="totalparcelasSAC"><br>
+            <label for="taxaSAC">Taxa de juros</label><br>
+            <input type="taxaSAC" id="taxaSAC" name="taxaSAC"><br>
+
+            <br>
+            <a class="startcalc" href="#select-calc" onclick="CalculaSAC()">CALCULAR</a><br><br><br>
+
+            <div class="Total" id="FiltroSAC" style="display:none">
+                <label for="pedioro">Filtar periodo</label><br>
+                <input type="number" id="deSAC" name="pedioro" placeholder="De...">
+                <input type="number" id="ateSAC" name="pedioro" placeholder="Até..."><br><br>
+                <a class="startcalc" href="#select-calc" onclick="CalculaRangeSAC()">Filtrar</a><br><br><br>
+            </div>
+
+            <div id="loadingSAC" style="display: none;">
+                <img class="leres" src="./Imagens/esdras-lindo.png" alt="">
+                <div class="loading">Loading...</div>
+            </div>
+            <div class="Total" id="FiltroSAC1" style="display:none">
+                <div>
+                    <p>Total Pago</p>
+                    <p id="totalpagoSAC">...</p>
+                </div>
+                <div>
+                    <p>Total de juros pago</p>
+                    <p id="totaljurosSAC">...</p>
+                </div>
+                <div">
+                    <p>Total de amortização acumulada</p>
+                    <p id="totalarmotizadoSAC">...</p>
+
+            </div>
+
+            <p id="tabelaSAC"></p>
+        </section>
+        <section id="PRICE" class="calc" style="display: none;">
+            <h1>Amortização em sistema PRICE</h1>
+            <label for="saldoDevedorPRICE">Saldo Devedor</label><br>
+            <input type="number" id="saldoDevedorPRICE" name="saldoDevedorPRICE"><br>
+            <label for="totalparcelasPRICE">Total de parcelas</label><br>
+            <input type="number" id="totalparcelasPRICE" name="totalparcelasPRICE"><br>
+            <label for="taxaPRICE">Taxa de juros</label><br>
+            <input type="number" id="taxaPRICE" name="taxaPRICE"><br>
+
+            <br>
+
+            <a class="startcalc" href="#select-calc" onclick="CalculaPrice()">CALCULAR</a><br><br><br>
+            <div id="FiltroPrice" style="display:none">
+                <label for="pedioro">Filtar periodo</label><br>
+                <input type="number" id="dePRICE" name="pedioro" placeholder="De...">
+                <input type="number" id="atePRICE" name="pedioro" placeholder="Até..."><br><br>
+                <a class="startcalc" href="#select-calc" onclick="CalculaRangePrice()">Filtrar</a><br><br><br>
+            </div>
+
+            <div id="loadingPRICE" style="display: none;">
+                <img class="leres" src="./Imagens/esdras-lindo.png" alt="">
+                <div class="loading">Loading...</div>
+            </div>
+            <div class="Total" id="FiltroPrice1" style="display:none">
+                <div>
+                    <p>Total Pago</p>
+                    <p id="totalpagoPRICE">...</p>
+                </div>
+                <div>
+                    <p>Total de juros pago</p>
+                    <p id="totaljurosPRICE">...</p>
+                </div>
+                <div">
+                    <p>Total de amortização acumulada</p>
+                    <p id="totalarmotizadoPRICE">...</p>
+
+            </div>
+
+            <p id="tabelaPRICE"></p>
+        </section>
+
+
+    </div>
+    <footer>
+        <h3 style="color:white">Todos os Direitos reservados a Cesar & Esdras 8ºSemestre de SI UNASP 2022</h3>
+    </footer>
+</body>
+
+<script>
+    function showSAC() {
+        document.getElementById('SAC').style.display = "block";
+        document.getElementById('PRICE').style.display = "none";
+    }
+
+    function showPRICE() {
+        document.getElementById('PRICE').style.display = "block";
+        document.getElementById('SAC').style.display = "none";
+    }
+</script>
+<script>
+
+    function CalculaRangePrice() {
+        const dados = CalculaPrice();
+        const inicioRange = document.getElementById('dePRICE').value
+        const fimRange = document.getElementById('atePRICE').value
+
+        let totalpago = 0;
+        let totaljuros = 0;
+        let totalamortizacao = 0;
+
+        for (let counter = inicioRange - 1; counter <= fimRange - 1; counter++) {
+            totalpago += dados[counter].prestacao
+            totaljuros += dados[counter].juro
+            totalamortizacao += dados[counter].amortizacao
+        }
+
+        document.getElementById("totalpagoPRICE").innerHTML = totalpago.toFixed(2);
+        document.getElementById("totaljurosPRICE").innerHTML = totaljuros.toFixed(2);
+        document.getElementById("totalarmotizadoPRICE").innerHTML = totalamortizacao.toFixed(2);
+
+    }
+    function CalculaRangeSAC() {
+        const dados = CalculaSAC();
+        const inicioRange = document.getElementById('deSAC').value
+        const fimRange = document.getElementById('ateSAC').value
+
+        let totalpago = 0;
+        let totaljuros = 0;
+        let totalamortizacao = 0;
+
+        for (let counter = inicioRange - 1; counter <= fimRange - 1; counter++) {
+            totalpago += dados[counter].prestacao
+            totaljuros += dados[counter].juro
+            totalamortizacao += dados[counter].amortizacao
+        }
+
+        document.getElementById("totalpagoSAC").innerHTML = totalpago.toFixed(2);
+        document.getElementById("totaljurosSAC").innerHTML = totaljuros.toFixed(2);
+        document.getElementById("totalarmotizadoSAC").innerHTML = totalamortizacao.toFixed(2);
+    }
+
+    function CalculaPrice() {
+
+        Rodaloading();
+
+        var saldoDevedor = document.getElementById("saldoDevedorPRICE").value;
+        var totalParcelas = document.getElementById("totalparcelasPRICE").value;
+        var taxa = document.getElementById("taxaPRICE").value;
+        inicioPRICE = document.getElementById("dePRICE").value;
+        fimPRICE = document.getElementById("atePRICE").value;
+        totalpago = 0;
+        totaljuros = 0;
+        totalamortizacao = 0;
+
+        // if (inicioPRICE == '' || fimPRICE == '') {
+        //     inicioPRICE = 1;
+        //     fimPRICE = totalParcelas;
+        // }
+
+
+        var textotabela = '<table style="width: 100% ; text-align: center;"><thead><td>Mes</td><td>Prestação</td><td>Amortização</td><td>Juros</td><td>Saldo devedor</td></thead>';
+
+
+        const parcela = (Number(saldoDevedor) * (Number(taxa) / 100) * Math.pow((1 + (Number(taxa) / 100)), Number(totalParcelas))) / ((Math.pow((1 + (Number(taxa) / 100)), Number(totalParcelas))) - 1);
+
+        var prestacoes = [];
+
+        for (let mes = 0; mes < totalParcelas; mes++) {
+            if (mes == 0) {
+                const juro = (Number(saldoDevedor) * (1 + (Number(taxa) / 100))) - Number(saldoDevedor);
+                const amortizacao = parcela - juro;
+                const novoSaldoDevedor = saldoDevedor - amortizacao;
+
+                // if (inicioPRICE > mes) {
+                //     if (inicioPRICE != '' && fimPRICE != '' && inicioPRICE <= fimPRICE) {
+                //         totalpago += parcela;
+                //         totaljuros += juro;
+                //         totalamortizacao += amortizacao;
+                //         inicioPRICE++;
+
+                //     }
+                // }
+
+
+                textotabela += `<tr>
+                    <td>${mes + 1}</td><td>${parcela.toFixed(2)}</td><td>${amortizacao.toFixed(2)}</td><td>${juro.toFixed(2)}</td><td>${novoSaldoDevedor.toFixed(2)}</td>
+                    </tr>`;
+                prestacoes.push({
+                    mes: mes + 1,
+                    prestacao: parcela,
+                    amortizacao: amortizacao,
+                    juro: juro,
+                    saldoDevedor: novoSaldoDevedor
+                })
+            } else {
+                const juro = (prestacoes[mes - 1].saldoDevedor * (1 + (Number(taxa) / 100))) - prestacoes[mes - 1].saldoDevedor
+                const amortizacao = parcela - juro;
+                const novoSaldoDevedor = prestacoes[mes - 1].saldoDevedor - amortizacao;
+
+                // if (inicioPRICE >= mes) {
+                //     if (inicioPRICE != '' && fimPRICE != '' && inicioPRICE <= fimPRICE) {
+                //         totalpago += parcela;
+                //         totaljuros += juro;
+                //         totalamortizacao += amortizacao;
+                //         inicioPRICE++;
+
+                //         console.log(juro);
+                //     }
+                // }
+
+                textotabela += `<tr>
+                    <td>${mes + 1}</td><td>${parcela.toFixed(2)}</td><td>${amortizacao.toFixed(2)}</td><td>${juro.toFixed(2)}</td><td>${novoSaldoDevedor.toFixed(2)}</td>
+                        </tr>`;
+                prestacoes.push({
+                    mes: mes + 1,
+                    prestacao: parcela,
+                    amortizacao: amortizacao,
+                    juro: juro,
+                    saldoDevedor: novoSaldoDevedor
+                })
+            }
+        }
+        textotabela += '</table>'
+        document.getElementById("tabelaPRICE").innerHTML = textotabela;
+        document.getElementById("totalpagoPRICE").innerHTML = totalpago.toFixed(2);
+        document.getElementById("totaljurosPRICE").innerHTML = totaljuros.toFixed(2);
+        document.getElementById("totalarmotizadoPRICE").innerHTML = totalamortizacao.toFixed(2);
+
+
+
+        // console.log(totalpago);
+        // console.log(totaljuros);
+        // console.log(totalamortizacao);
+
+
+        return prestacoes;
+    }
+    function CalculaSAC() {
+        Rodaloading();
+        var saldoDevedor = document.getElementById("saldoDevedorSAC").value;
+        var totalParcelas = document.getElementById("totalparcelasSAC").value;
+        var taxa = document.getElementById("taxaSAC").value;
+        inicioSAC = document.getElementById("deSAC").value;
+        fimSAC = document.getElementById("ateSAC").value;
+        totalpago = 0;
+        totaljuros = 0;
+        totalamortizacao = 0;
+        var textotabela = '<table style="width: 100% ; text-align: center;"><thead><td>Mes</td><td>Prestação</td><td>Amortização</td><td>Juros</td><td>Saldo devedor</td></thead>';
+
+        // if (inicioSAC == '' || fimSAC == '') {
+        //     inicioSAC = 1;
+        //     fimSAC = totalParcelas;
+        // }
+
+        const amortizacao = Number(saldoDevedor) / Number(totalParcelas);
+
+        let parcelas = []
+
+        for (let mes = 0; mes < Number(totalParcelas); mes++) {
+            if (mes == 0) {
+                const juro = Number(saldoDevedor) * (Number(taxa) / 100);
+                const prestacao = juro + amortizacao;
+                const novoSaldoDevedor = Number(saldoDevedor) - amortizacao;
+
+                // if (inicioSAC != '' && fimSAC != '' && inicioSAC <= fimSAC) {
+                //     totalpago += prestacao;
+                //     totaljuros += juro;
+                //     totalamortizacao += amortizacao;
+                //     inicioSAC++;
+                // }
+
+                textotabela += `<tr>
+                    <td>${mes + 1}</td><td>${prestacao.toFixed(2)}</td><td>${juro.toFixed(2)}</td><td>${amortizacao.toFixed(2)}</td><td>${novoSaldoDevedor.toFixed(2)}</td>
+                    </tr>`;
+
+
+
+                parcelas.push({
+                    mes: mes + 1,
+                    prestacao,
+                    juro,
+                    amortizacao,
+                    saldoDevedor: novoSaldoDevedor
+                })
+            } else {
+                const juro = parcelas[mes - 1].saldoDevedor * (Number(taxa) / 100);
+                const prestacao = juro + amortizacao;
+                const novoSaldoDevedor = parcelas[mes - 1].saldoDevedor - amortizacao;
+
+                // if (inicioSAC != '' && fimSAC != '' && inicioSAC <= fimSAC) {
+                //     totalpago += prestacao;
+                //     totaljuros += juro;
+                //     totalamortizacao += amortizacao;
+                //     inicioSAC++;
+                // }
+
+
+                textotabela += `<tr>
+                    <td>${mes + 1}</td><td>${prestacao.toFixed(2)}</td><td>${juro.toFixed(2)}</td><td>${amortizacao.toFixed(2)}</td><td>${novoSaldoDevedor.toFixed(2)}</td>
+                    </tr>`;
+
+                parcelas.push({
+                    mes: mes + 1,
+                    prestacao,
+                    juro,
+                    amortizacao,
+                    saldoDevedor: novoSaldoDevedor
+                })
+            }
+        }
+        textotabela += '</table>'
+        document.getElementById("tabelaSAC").innerHTML = textotabela;
+
+
+        // document.getElementById("totalpagoSAC").innerHTML = totalpago;
+        // document.getElementById("totaljurosSAC").innerHTML = totaljuros;
+        // document.getElementById("totalarmotizadoSAC").innerHTML = totalamortizacao;
+
+
+        // console.log(totalpago);
+        // console.log(totaljuros);
+        // console.log(totalamortizacao);
+
+        return parcelas;
+    }
+
+
+    function Rodaloading() {
+        document.getElementById("loadingPRICE").style.display = 'block';
+        document.getElementById("loadingSAC").style.display = 'block';
+        document.getElementById("tabelaPRICE").style.display = 'none';
+        document.getElementById("tabelaSAC").style.display = 'none';
+        
+
+
+        setTimeout(() => {
+            Rodaloading2()
+        }, 3000);
+    }
+    function Rodaloading2() {
+        document.getElementById("loadingPRICE").style.display = 'none';
+        document.getElementById("loadingSAC").style.display = 'none';
+        document.getElementById("tabelaSAC").style.display = 'block';
+        document.getElementById("tabelaPRICE").style.display = 'block';
+        document.getElementById("FiltroPrice").style.display = 'block';
+        document.getElementById("FiltroPrice1").style.display = 'flex';
+        document.getElementById("FiltroSAC").style.display = 'block';
+        document.getElementById("FiltroSAC1").style.display = 'flex';
+    }
+</script>
+
+</html>

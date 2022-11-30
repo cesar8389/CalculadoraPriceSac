@@ -1,0 +1,132 @@
+html{
+    scroll-behavior: smooth;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+
+    animation: moveup 5s;
+    background-color: #1c2d50;
+
+}
+footer{
+    margin-top: 50px;
+    width: 100%;
+    background-color: #272626;
+    height: 90px;
+    text-align: center;
+
+}
+
+h3 {
+    color: #ff4c00;
+    margin: auto auto;
+
+}
+
+.craudinho-img {
+    width: 140px;
+    height: 100px;
+    margin-left: 10vw;
+    position: relative;
+    animation: ladooutro 3s;
+
+}
+#select-calc{
+    display: flex;
+    margin: 0 auto;
+    justify-content: space-evenly;
+    margin: 50px 0 50px 0;
+}
+#select-calc > a, .startcalc {
+    text-decoration: none;
+    color: white;
+    background-color: #ff4c00;
+    padding: 10px;
+    border: solid #ff4d0070;
+    border-radius: 8px ;
+    transition: all 0.5s;
+}
+#select-calc > a:hover{
+    background-color: #aa2703;
+    color: #1c2d50;
+}
+.calc{
+    border-radius: 5px;
+    margin: 0 25vw;
+    padding: 50px;
+    background-color: #1c2d50;
+    color: #ff4c00;
+}
+.calc > input{
+    width: 100%;
+}
+/*.corpo{
+    min-height: 40vw;
+}*/
+.leres{
+    width: 50px;
+    animation: giragira 3s ;
+    position: relative;
+    top: 30px;
+
+}
+.loading{
+    border-radius: 15px;
+    background-color: grey;
+}
+.Total{
+    display: flex;
+    justify-content: space-around;
+}
+
+@keyframes ladooutro {
+    0% {
+        left: -50px;
+    }
+
+    50% {
+        left: 10px;
+    }
+
+    100% {
+        left: 0px;
+    }
+}
+@keyframes giragira {
+    10%{
+        transform: rotate(0deg);
+        left: 0vw;
+    }
+    20%{
+        transform: rotate(180deg);
+    }
+    30%{
+        transform: rotate(360deg);
+    }
+    40%{
+        transform: rotate(540deg);
+    }
+    50%{
+        transform:rotate(720deg);
+    }
+    60%{
+        transform: rotate(900deg);
+    }
+    70%{
+        transform: rotate(1080deg);
+    }
+    80%{
+        transform: rotate(1260deg);
+    }
+    90%{
+        transform: rotate(1440deg);
+    }
+    100%{
+        left: 35vw;
+    }
+}
